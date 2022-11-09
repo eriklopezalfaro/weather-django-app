@@ -25,7 +25,9 @@ def main(request):
     result = f'\n{CITY}: {temp_celsius}°C / {temp_fahrenheit}°F {description}\n'
     print(result)
     
-    return HttpResponse(result)
+
+    # return HttpResponse(result)
+    return render(request, "base.html", {'result':result})
 
 def kelvin_to_celsius_fahrenheit(kelvin):
     celsius = kelvin - 273.15
