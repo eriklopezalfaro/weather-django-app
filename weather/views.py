@@ -2,6 +2,7 @@ from django.shortcuts import render
 import requests, sys
 from django.http import HttpResponse
 from django.conf import settings
+from .forms import CityForm
 
 BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?'
 CITY = 'Seattle' #validate and could be more arguments
@@ -27,12 +28,19 @@ def main(request):
     
 
     # return HttpResponse(result)
-    return render(request, "base.html", {'result':result})
+    return render(request, "weather/base.html", {'result':result})
+
+def city_name(request):
+    if request.method == 'POST':
+        form = CityForm(request.POST)
+    return render(request, "weather/base.html", {'form':form})
+    
 
 def kelvin_to_celsius_fahrenheit(kelvin):
     celsius = kelvin - 273.15
     fahrenheit = celsius * (9/5) + 32
     return celsius, fahrenheit
+
 
 
 if __name__ == '__main__':

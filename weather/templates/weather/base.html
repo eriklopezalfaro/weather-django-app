@@ -8,6 +8,11 @@
 </head>
 <body>
     <h1>hello</h1>
+    <form action="{% url 'city' %}" method="post">
+        <label for="city_name">City: </label>
+        <input id="city_name" type="text" name="city_name" value="{{ current_city }}">
+        <input type="submit" value="OK">
+    </form>
     <h1>{{ result }}</h1>
 </body>
 </html>
