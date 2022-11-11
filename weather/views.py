@@ -28,8 +28,8 @@ def get_data(city):
     temp_kelvin = response['main']['temp']
     temp_celsius, temp_fahrenheit = kelvin_to_celsius_fahrenheit(temp_kelvin)
      
-    # make and object and use .as_p in html
-    result = f'\nCity: {city} \nTemperature °C / °F: {temp_celsius}°C / {temp_fahrenheit}°F \nDescription: {description}\n'
+    # make and object and use .as_p in html, also make decimal smaller
+    result = f'City: {city} Temperature °C / °F: {temp_celsius}°C / {temp_fahrenheit}°F Description: {description}'
     # print(result)
     return result
 
