@@ -1,14 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests, sys
 from django.http import HttpResponse
 from django.conf import settings
 from .forms import CityForm
 
 BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?'
-CITY = 'Seattle' #validate and could be more arguments
+# CITY = 'Seattle' #validate and could be more arguments
 # Create your views here.
 def main(request):
-    url = f'{BASE_URL}q={CITY}&APPID={settings.API_KEY}'
+    # return HttpResponse(result)
+    # add context holding local weather
+    return render(request, "weather/base.html",)
+
+def get_data(city):
+    url = f'{BASE_URL}q={city}&APPID={settings.API_KEY}'
 
     try:
         response = requests.get(url)
@@ -23,16 +28,23 @@ def main(request):
     temp_kelvin = response['main']['temp']
     temp_celsius, temp_fahrenheit = kelvin_to_celsius_fahrenheit(temp_kelvin)
      
-    result = f'\n{CITY}: {temp_celsius}°C / {temp_fahrenheit}°F {description}\n'
-    print(result)
-    
-
-    # return HttpResponse(result)
-    return render(request, "weather/base.html", {'result':result})
+    # make and object and use .as_p in html
+    result = f'\nCity: {city} \nTemperature °C / °F: {temp_celsius}°C / {temp_fahrenheit}°F \nDescription: {description}\n'
+    # print(result)
+    return result
 
 def city_name(request):
     if request.method == 'POST':
         form = CityForm(request.POST)
+        if form.is_valid():
+            city = form.cleaned_data.get('city_name')
+            print('valid..')
+            # process the data in form.cleaned_data as required
+            return render(request, "weather/base.html", {'form':form, 'city':get_data(city)})
+
+    else:
+        form = CityForm()
+
     return render(request, "weather/base.html", {'form':form})
     
 

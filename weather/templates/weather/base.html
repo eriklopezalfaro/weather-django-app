@@ -7,12 +7,19 @@
     <title>Weather</title>
 </head>
 <body>
-    <h1>hello</h1>
-    <form action="{% url 'city' %}" method="post">
+    <h1>Weather411</h1>
+    <form action="{% url 'city_name' %}" method="post">
+        {% csrf_token %}
         <label for="city_name">City: </label>
         <input id="city_name" type="text" name="city_name" value="{{ current_city }}">
         <input type="submit" value="OK">
     </form>
     <h1>{{ result }}</h1>
+    {% if city %}
+    <h1>
+        
+        {{ city }}
+    </h1>
+    {% endif %}
 </body>
 </html>
