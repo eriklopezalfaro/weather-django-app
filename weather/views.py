@@ -3,6 +3,7 @@ import requests, sys
 from django.http import HttpResponse
 from django.conf import settings
 from .forms import CityForm
+import pprint
 
 BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?'
 # CITY = 'Seattle' #validate and could be more arguments
@@ -23,14 +24,25 @@ def get_data(city):
         sys.exit('Try agin with Valid city.')
 
     response = response.json()
+    pprint.pprint(response, indent=2)
+
 
     description = response['weather'][0]['description']
     temp_kelvin = response['main']['temp']
     temp_celsius, temp_fahrenheit = kelvin_to_celsius_fahrenheit(temp_kelvin)
      
     # make and object and use .as_p in html, also make decimal smaller
-    result = f'City: {city} Temperature °C / °F: {temp_celsius}°C / {temp_fahrenheit}°F Description: {description}'
-    # print(result)
+    # result = f'City: {city} Temperature °C / °F: {temp_celsius}°C / {temp_fahrenheit}°F Description: {description}'
+    result = {
+        'name':city, 
+        'temp_celcius':temp_celsius,
+        'temp_fahrenheit':temp_fahrenheit,
+        'description':description,
+        'main':response['main'],
+    }
+
+    pprint.pprint(result['main'], indent=2)
+
     return result
 
 def city_name(request):
@@ -38,8 +50,11 @@ def city_name(request):
         form = CityForm(request.POST)
         if form.is_valid():
             city = form.cleaned_data.get('city_name')
+            city_format = get_data(city)
+
             print('valid..')
             # process the data in form.cleaned_data as required
+            # print('=================',get_data(city), '------------------------------')
             return render(request, "weather/base.html", {'form':form, 'city':get_data(city)})
 
     else:
@@ -51,7 +66,7 @@ def city_name(request):
 def kelvin_to_celsius_fahrenheit(kelvin):
     celsius = kelvin - 273.15
     fahrenheit = celsius * (9/5) + 32
-    return celsius, fahrenheit
+    return format(celsius, '.2f'), format(fahrenheit, '.2f')
 
 
 

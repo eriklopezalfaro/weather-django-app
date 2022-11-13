@@ -7,6 +7,17 @@
     <title>Weather</title>
 </head>
 <body>
+    {% load bootstrap5 %}
+    
+    {# Display a form #}
+    
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+        {% endbuttons %}
+    </form>
     <h1>Weather411</h1>
     <form action="{% url 'city_name' %}" method="post">
         {% csrf_token %}
@@ -14,12 +25,14 @@
         <input id="city_name" type="text" name="city_name" value="{{ current_city }}">
         <input type="submit" value="OK">
     </form>
-    <h1>{{ result }}</h1>
     {% if city %}
-    <h1>
-        
-        {{ city }}
-    </h1>
+    <p>City: {{ city.name }}</p>
+    <p>Temperature °C/ °F: {{ city.temp_celcius }}°C / {{ city.temp_fahrenheit }}°F </p>
+    <p>Description: {{ city.description }}</p>
+    {% for key, value in city.main.items %}
+    <p>{{ key }} : {{ value }}</p>
+    {% endfor %}
+    <p></p>
     {% endif %}
 </body>
 </html>
