@@ -11,7 +11,7 @@ BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?'
 def main(request):
     # return HttpResponse(result)
     # add context holding local weather
-    return render(request, "weather/base.html",)
+    return redirect('city_name')
 
 def get_data(city):
     url = f'{BASE_URL}q={city}&APPID={settings.API_KEY}'

@@ -8,31 +8,29 @@
 </head>
 <body>
     {% load bootstrap5 %}
-    
-    {# Display a form #}
-    
-    <form action="" method="post" class="form">
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <nav class="navbar navbar-dark bg-primary">
+        <!-- Navbar content -->
+        <h1 class="m-5">WeatherMan</h1>
+    </nav>
+    <form action="{% url 'city_name' %}" method="post" class="form m-5">
         {% csrf_token %}
+        {% if form %}
         {% bootstrap_form form %}
         {% buttons %}
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Get weather</button>
         {% endbuttons %}
-    </form>
-    <h1>Weather411</h1>
-    <form action="{% url 'city_name' %}" method="post">
-        {% csrf_token %}
-        <label for="city_name">City: </label>
-        <input id="city_name" type="text" name="city_name" value="{{ current_city }}">
-        <input type="submit" value="OK">
+        {% endif %}
+
     </form>
     {% if city %}
-    <p>City: {{ city.name }}</p>
-    <p>Temperature °C/ °F: {{ city.temp_celcius }}°C / {{ city.temp_fahrenheit }}°F </p>
-    <p>Description: {{ city.description }}</p>
+    <p class="m-5">City: {{ city.name }}</p>
+    <p class="m-5">Temperature °C/ °F: {{ city.temp_celcius }}°C / {{ city.temp_fahrenheit }}°F </p>
+    <p class="m-5">Description: {{ city.description }}</p>
     {% for key, value in city.main.items %}
-    <p>{{ key }} : {{ value }}</p>
+    <p class="m-5">{{ key }} : {{ value }}</p>
     {% endfor %}
-    <p></p>
     {% endif %}
 </body>
 </html>
